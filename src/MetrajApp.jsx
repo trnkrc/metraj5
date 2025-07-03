@@ -4,10 +4,10 @@ import * as XLSX from "xlsx";
 function parseSequence(seq) {
   if (!seq) return [];
   return seq
-    .replace(/→|—|–|-->/g, " ")
-    .replace(/[,;]/g, " ")
-    .split(/\s+/)
-    .filter((v) => v.length);
+    .replace(/→|->|--|—|–|>/g, " ") // tüm ok işaretlerini boşlukla değiştir
+    .replace(/[,;]/g, " ")          // virgül ve noktalı virgül de boşluk olsun
+    .split(/\s+/)                   // boşluklara göre ayır
+    .filter((v) => v.length);       // boş değerleri at
 }
 
 const COLUMNS = [
