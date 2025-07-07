@@ -56,12 +56,7 @@ export default function MetrajUploader() {
           accept=".pdf"
           onChange={(e) => setFile(e.target.files[0])}
         />
-        <button
-          onClick={handleSubmit}
-          className="bg-blue-500 text-white px-4 py-1 rounded ml-2"
-        >
-          Metrajı Getir
-        </button>
+<button onClick={handleSubmit}>Metrajı Getir</button>
       </div>
 
       {data.length > 0 && (
