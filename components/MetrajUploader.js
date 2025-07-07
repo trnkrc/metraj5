@@ -1,20 +1,3 @@
-const downloadCSV = (rows) => {
-  const headers = ["boru_cap", "uzunluk_m", "akar_kotu_1", "akar_kotu_2"];
-  const csvContent = [
-    headers.join(","),
-    ...rows.map(row =>
-      [row.boru_cap, row.uzunluk_m, row.akar_kotu_1, row.akar_kotu_2].join(",")
-    )
-  ].join("\n");
-
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-  link.setAttribute("href", url);
-  link.setAttribute("download", "metraj.csv");
-  link.click();
-};
 import { useState } from "react";
 
 export default function MetrajUploader() {
@@ -23,18 +6,44 @@ export default function MetrajUploader() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!file) return alert("PDF dosyası seçmedin!");
+    if (!file) {
+      alert("Lütfen bir PDF dosyası seçin.");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("https://otomasyon2.onrender.com/extract-metraj", {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const res = await fetch("https://otomasyon2.onrender.com/extract-metraj", {
+        method: "POST",
+        body: formData,
+      });
 
-    const json = await res.json();
-    setData(json.data || []);
+      const json = await res.json();
+      setData(json.data || []);
+    } catch (error) {
+      console.error("API çağrısı başarısız:", error);
+      alert("Metraj verisi alınamadı.");
+    }
+  };
+
+  const downloadCSV = (rows) => {
+    const headers = ["boru_cap", "uzunluk_m", "akar_kotu_1", "akar_kotu_2"];
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row =>
+        [row.boru_cap, row.uzunluk_m, row.akar_kotu_1, row.akar_kotu_2].join(",")
+      )
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "metraj.csv");
+    link.click();
   };
 
   return (
@@ -46,40 +55,24 @@ export default function MetrajUploader() {
           onChange={(e) => setFile(e.target.files[0])}
         />
         <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded ml-2">
-          Gönder
+          Metrajı Getir
         </button>
       </form>
 
       {data.length > 0 && (
-        <table className="mt-6 border w-full text-sm">
-          <thead>
-            <tr className="bg-gray-100">
-              <th>Boru Çapı</th>
-              <th>Uzunluk (m)</th>
-              <th>Akar Kot 1</th>
-              <th>Akar Kot 2</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, i) => (
-              <tr key={i} className="text-center border-t">
-                <td>{row.boru_cap}</td>
-                <td>{row.uzunluk_m}</td>
-                <td>{row.akar_kotu_1}</td>
-                <td>{row.akar_kotu_2}</td>
+        <>
+          <table className="mt-6 border w-full text-sm">
+            <thead>
+              <tr className="bg-gray-100">
+                <th>Boru Çapı</th>
+                <th>Uzunluk (m)</th>
+                <th>Akar Kot 1</th>
+                <th>Akar Kot 2</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <button
-          onClick={() => downloadCSV(data)}
-            className="mt-4 px-4 py-2 bg-green-600 text-white rounded"
-          >
-      Metraj Verisini İndir (CSV)
-    </button>
-   </>
-)}
-      )}
-    </div>
-  );
-}
+            </thead>
+            <tbody>
+              {data.map((row, i) => (
+                <tr key={i} className="text-center border-t">
+                  <td>{row.boru_cap}</td>
+                  <td>{row.uzunluk_m}</td>
+                  <td>{row.akar
