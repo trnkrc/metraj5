@@ -10,7 +10,14 @@ export default function MetrajUploader() {
       alert("Lütfen bir PDF dosyası seçin.");
       return;
     }
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  console.log("✅ handleSubmit çalıştı");
 
+  if (!file) {
+    alert("Lütfen bir PDF dosyası seçin.");
+    return;
+  }
     const formData = new FormData();
     formData.append("file", file);
 
