@@ -4,20 +4,14 @@ export default function MetrajUploader() {
   const [file, setFile] = useState(null);
   const [data, setData] = useState([]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    console.log("📥 PDF gönderimi başlıyor");
+
     if (!file) {
       alert("Lütfen bir PDF dosyası seçin.");
       return;
     }
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  console.log("✅ handleSubmit çalıştı");
 
-  if (!file) {
-    alert("Lütfen bir PDF dosyası seçin.");
-    return;
-  }
     const formData = new FormData();
     formData.append("file", file);
 
@@ -28,9 +22,10 @@ const handleSubmit = async (e) => {
       });
 
       const json = await res.json();
+      console.log("📦 API'den gelen veri:", json);
       setData(json.data || []);
     } catch (error) {
-      console.error("API çağrısı başarısız:", error);
+      console.error("❌ API çağrısı başarısız:", error);
       alert("Metraj verisi alınamadı.");
     }
   };
@@ -55,16 +50,19 @@ const handleSubmit = async (e) => {
 
   return (
     <div className="p-4">
-      <form onSubmit={handleSubmit}>
+      <div>
         <input
           type="file"
           accept=".pdf"
           onChange={(e) => setFile(e.target.files[0])}
         />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded ml-2">
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-500 text-white px-4 py-1 rounded ml-2"
+        >
           Metrajı Getir
         </button>
-      </form>
+      </div>
 
       {data.length > 0 && (
         <>
@@ -82,4 +80,5 @@ const handleSubmit = async (e) => {
                 <tr key={i} className="text-center border-t">
                   <td>{row.boru_cap}</td>
                   <td>{row.uzunluk_m}</td>
-                  <td>{row.akar
+                  <td>{row.akar_kotu_1}</td>
+                  <td>{row.
