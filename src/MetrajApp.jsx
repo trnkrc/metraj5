@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
+import MetrajUploader from "./components/MetrajUploader"; // ✅ EKLENDİ
 
 function parseSequence(seq) {
   if (!seq) return [];
@@ -97,10 +98,17 @@ export default function MetrajApp() {
       <div className="text-center">
         <h1 className="text-3xl font-bold">Altyapı Metraj Sıralama Sistemi</h1>
         <p className="text-sm text-gray-500">
-          PDF → Veri Çıkarma (yakında) · Manuel Sıralama → Otomatik Metraj Cetveli
+          PDF → Veri Çıkarma · Manuel Sıralama → Otomatik Metraj Cetveli
         </p>
       </div>
 
+      {/* ✅ Otomatik PDF Metrajı */}
+      <div className="border rounded p-4 bg-gray-50">
+        <h2 className="font-semibold mb-2">Otomatik Metraj Çıkar (PDF üzerinden)</h2>
+        <MetrajUploader />
+      </div>
+
+      {/* ✅ Manuel Sıralama */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="border rounded p-4 space-y-4">
           <h2 className="font-semibold">ADIM 1: PDF / DWG Yükle</h2>
