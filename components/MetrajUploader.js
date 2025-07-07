@@ -1,3 +1,20 @@
+const downloadCSV = (rows) => {
+  const headers = ["boru_cap", "uzunluk_m", "akar_kotu_1", "akar_kotu_2"];
+  const csvContent = [
+    headers.join(","),
+    ...rows.map(row =>
+      [row.boru_cap, row.uzunluk_m, row.akar_kotu_1, row.akar_kotu_2].join(",")
+    )
+  ].join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", "metraj.csv");
+  link.click();
+};
 import { useState } from "react";
 
 export default function MetrajUploader() {
@@ -54,6 +71,14 @@ export default function MetrajUploader() {
             ))}
           </tbody>
         </table>
+        <button
+          onClick={() => downloadCSV(data)}
+            className="mt-4 px-4 py-2 bg-green-600 text-white rounded"
+          >
+      Metraj Verisini İndir (CSV)
+    </button>
+   </>
+)}
       )}
     </div>
   );
